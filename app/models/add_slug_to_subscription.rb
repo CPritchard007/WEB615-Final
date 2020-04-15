@@ -1,0 +1,2 @@
+class AddSlugToSubscription < ApplicationRecord
+end

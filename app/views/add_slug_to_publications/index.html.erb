@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Add Slug To Publications</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @add_slug_to_publications.each do |add_slug_to_publication| %>
+      <tr>
+        <td><%= link_to 'Show', add_slug_to_publication %></td>
+        <td><%= link_to 'Edit', edit_add_slug_to_publication_path(add_slug_to_publication) %></td>
+        <td><%= link_to 'Destroy', add_slug_to_publication, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Add Slug To Publication', new_add_slug_to_publication_path %>

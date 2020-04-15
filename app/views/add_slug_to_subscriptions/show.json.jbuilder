@@ -1,0 +1,1 @@
+json.partial! "add_slug_to_subscriptions/add_slug_to_subscription", add_slug_to_subscription: @add_slug_to_subscription

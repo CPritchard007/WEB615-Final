@@ -1,0 +1,2 @@
+class AddSlugToPublication < ApplicationRecord
+end
