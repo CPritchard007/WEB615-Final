@@ -4,7 +4,13 @@ class SubscriptionsController < ApplicationController
   # GET /subscriptions
   # GET /subscriptions.json
   def index
-    @subscriptions = Subscription.all
+    authorize Subscription
+
+    @subscriptions = Subscription.paginate(page: params[:page], per_page: params[:per_page] ||= 30).order(created_at: :desc)
+    respond_to do |format|
+      format.json { render json: Subscription.all, status: :ok }
+      format.html {}
+    end
   end
 
   # GET /subscriptions/1
