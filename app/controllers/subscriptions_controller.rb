@@ -64,7 +64,14 @@ class SubscriptionsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subscription
-      @subscription = Subscription.find(params[:id])
+      begin
+        @subscription = Subscription.friendly.find(params[:id])
+      rescue StandardError
+        respond_to do |format|
+          format.json { render status: 404, json: { alert: "The subscription you're looking for cannot be found" } }
+          format.html { redirect_to subscriptions_path, alert: "The comment you're looking for cannot be found" }
+        end
+      end
     end
 
     # Only allow a list of trusted parameters through.

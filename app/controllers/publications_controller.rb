@@ -1,30 +1,44 @@
+# frozen_string_literal: true
+
 class PublicationsController < ApplicationController
-  before_action :set_publication, only: [:show, :edit, :update, :destroy]
+  before_action :set_publication, only: %i[show edit update destroy]
+  after_action :verify_authorized
 
   # GET /publications
   # GET /publications.json
   def index
-    @publications = Publication.all
+    authorize Publication
+
+    @publications = Publication.paginate(page: params[:page], per_page: params[:per_page] ||= 30).order(created_at: :desc)
+    respond_to do |format|
+      format.json { render json: Publication.all, status: :ok }
+      format.html {}
+    end
   end
 
   # GET /publications/1
   # GET /publications/1.json
   def show
+    respond_to do |format|
+      format.json { render json: @publication }
+      format.html { @publication }
+    end
   end
 
   # GET /publications/new
   def new
+    authorize Publication
     @publication = Publication.new
   end
 
   # GET /publications/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /publications
   # POST /publications.json
   def create
     @publication = Publication.new(publication_params)
+    authorize @publication
 
     respond_to do |format|
       if @publication.save
@@ -62,13 +76,24 @@ class PublicationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_publication
-      @publication = Publication.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def publication_params
-      params.require(:publication).permit(:name)
+  # Use callbacks to share common setup or constraints between actions.
+  def set_publication
+    begin
+      @publication = Publication.friendly.find(params[:id])
+    rescue StandardError
+      respond_to do |format|
+        format.json { render status: 404, json: { alert: "The Publication you're looking for cannot be found" } }
+        format.html { redirect_to publications_path, alert: "The Publication you're looking for cannot be found" }
+      end
     end
+    if @publication.present?
+      authorize @publication
+    end
+  end
+
+  # Only allow a list of trusted parameters through.
+  def publication_params
+    params.require(:publication).permit(:name)
+  end
 end
