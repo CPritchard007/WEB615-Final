@@ -10,6 +10,18 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Which bundler?
-          command: bundle -v
-      - ruby/bundle-install
+          name: Run bundle install
+          command: bundle install
+
+      - run:
+          name: Audit code with robocop
+          command: rubocop -l
+
+      - run:
+          name: Audit the gemfile
+          command: bundle-audit check
+
+      - run:
+          name: Deploy Master to heroku
+          command: git push https://git.heroku.com/evening-refuge-40256.git master
+
