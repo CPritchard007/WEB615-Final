@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-def create_seed_user(is_admin = false, first_name = Faker::Name.first_name, last_name = Faker::Name.last_name, email = nil)
+def create_seed_user(is_admin = false, first_name = Faker::Name.first_name, last_name = Faker::Name.last_name, _ = nil)
   full_name = "#{first_name} #{last_name}"
   final_email = Faker::Internet.safe_email(name: full_name)
   p "Final Email: #{final_email}"
