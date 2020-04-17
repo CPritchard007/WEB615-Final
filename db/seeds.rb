@@ -2,7 +2,7 @@
 
 def create_seed_user(is_admin = false, first_name = Faker::Name.first_name, last_name = Faker::Name.last_name, email = nil)
   full_name = "#{first_name} #{last_name}"
-  final_email = email ||= Faker::Internet.safe_email(name: full_name)
+  final_email = Faker::Internet.safe_email(name: full_name)
   p "Final Email: #{final_email}"
   user = User.find_or_initialize_by(email: final_email.downcase)
   if user.new_record?
@@ -42,7 +42,6 @@ def create_comment(article = create_article, user = create_seed_user)
   comment.message = Faker::Hacker.say_something_smart
   comment.user = user
   if comment.save
-    comment
     p "Comment #{comment.uuid} has been saved for article #{article.title}"
   else
     raise "#{comment.errors.full_messages}"
